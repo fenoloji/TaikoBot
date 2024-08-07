@@ -38,7 +38,7 @@ async function unwrap(amount, gasPrice, nonce) {
     const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
     
     // Pay tax
-    await payTax(gasPrice, nonce + 1);
+    //await payTax(gasPrice, nonce + 1);
 
     return receipt.transactionHash;
 }
