@@ -55,7 +55,7 @@ async function main() {
     let web3Instance = getWeb3();
     const lendRangeMin = 1.0;
     const lendRangeMax = 2.0;
-    const maxIterations = randomIterations();
+    const maxIterations = 130; //randomIterations();
     let iterationCount = 0;
 
     while (iterationCount < maxIterations) {
@@ -75,6 +75,7 @@ async function main() {
             break;
         }
 
+/*        
         // Lend
         let amount = Math.random() * (lendRangeMax - lendRangeMin) + lendRangeMin;
         amount = Math.floor(amount * 1_000_000);
@@ -90,7 +91,7 @@ async function main() {
         txHash = await executeTransaction(redeem, gasPriceWei, localNonce);
         if (!txHash) break;
         localNonce++;
-        
+*/        
         // Wrap
         const wrapAmountMin = 0.0003;
         const wrapAmountMax = 0.0004;
@@ -102,6 +103,7 @@ async function main() {
         localNonce++;
         txLink = `https://taikoscan.io/tx/${txHash}`;
         console.log(`Wrap Transaction sent: ${txLink}, \nAmount: ${wrapAmount} ETH`);
+        console.log('\x1b[42m%s\x1b[0m',`--------------------------------------------------------------`);
 
         // Unwrap
         localNonce = await getNonce(web3Instance);
@@ -110,6 +112,7 @@ async function main() {
         localNonce++;
         txLink = `https://taikoscan.io/tx/${txHash}`;
         console.log(`Unwrap Transaction sent: ${txLink}, \nAmount: ${wrapAmount} ETH`);
+        console.log('\x1b[42m%s\x1b[0m',`--------------------------------------------------------------`);
 
         iterationCount++;
     }
