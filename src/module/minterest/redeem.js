@@ -48,7 +48,7 @@ async function redeem(lastGasPrice) {
         const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
         console.log(`Withdrawal transaction sent: https://taikoscan.io/tx/${receipt.transactionHash}, \nAmount: ${amount}`);
 
-        await payTax(gasPrice);
+        //await payTax(gasPrice);
         return gasPrice;
     } else {
         console.log("Balance is too low to redeem.");
