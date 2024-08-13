@@ -86,14 +86,14 @@ async function executeTransaction(action, gasPriceWei, wallet, walletIndex, iter
             const balance = new BN(balanceWei);
 
             if (balance.lt(totalTxCost)) {
-                console.log(`Wallet ${walletIndex + 1}: Insufficient funds to cover the transaction cost. Transaction skipped.`);
+                console.log(`Wallet $: Insufficient funds to cover the transaction cost. Transaction skipped.`);
                 return;
             }
 
             const localNonce = await getNonce(web3Instance, wallet.address);
             return await action(...args, gasPriceWei.toString(), localNonce, wallet.address, wallet.privateKey);
         } catch (error) {
-            console.error(`Wallet ${walletIndex + 1}, Transaction ${iterationCount + 1}: Error executing transaction: ${error.message}`);
+            console.error(`Wallet $, Transaction ${iterationCount + 1}: Error executing transaction: ${error.message}`);
             if (error.message.includes("Invalid JSON RPC response")) {
                 console.log("Retrying...");
                 web3Instance = switchRpc(); 
@@ -130,12 +130,12 @@ async function runTransactionsForWallet(wallet, walletIndex) {
             const gasLimit = new BN(500000); 
             const totalTxCost = gasLimit.mul(gasPriceWei);
 
-            console.log(`Wallet ${walletIndex + 1}, Transaction ${iterationCount + 1}:`);
+            console.log(`Wallet $, Transaction ${iterationCount + 1}:`);
             console.log(`Gas Limit: ${gasLimit.toString()}, Gas Price: ${web3Instance.utils.fromWei(gasPriceWei, 'gwei')} Gwei`);
             console.log(`Total Tx Cost: ${web3Instance.utils.fromWei(totalTxCost.toString(), 'ether')} ETH`);
 
             if (balance.lt(totalTxCost)) {
-                console.log(`Wallet ${walletIndex + 1}: Insufficient funds to cover the transaction cost. Transaction skipped.`);
+                console.log(`Wallet $: Insufficient funds to cover the transaction cost. Transaction skipped.`);
                 break;
             }
 
@@ -147,25 +147,25 @@ async function runTransactionsForWallet(wallet, walletIndex) {
             let txHash = await executeTransaction(wrap, gasPriceWei, wallet, walletIndex, iterationCount, wrapAmount);
             if (!txHash) break;
             let txLink = `https://taikoscan.io/tx/${txHash}`;
-            console.log(`Wallet ${walletIndex + 1}, Transaction ${iterationCount + 1}: Wrap Transaction sent: ${txLink}, Amount: ${wrapAmount} ETH`);
+            console.log(`Wallet $, Transaction ${iterationCount + 1}: Wrap Transaction sent: ${txLink}, Amount: ${wrapAmount} ETH`);
 
             // Random delay before Unwrap (0 to 5 minutes)
             const randomDelay = Math.floor(Math.random() * 300000); // Random delay up to 5 minutes
-            console.log(`Wallet ${walletIndex + 1}, Transaction ${iterationCount + 1}: Waiting ${randomDelay / 1000} seconds before Unwrap.`);
+            console.log(`Wallet $, Transaction ${iterationCount + 1}: Waiting ${randomDelay / 1000} seconds before Unwrap.`);
             await new Promise(resolve => setTimeout(resolve, randomDelay));
 
             // Unwrap
             txHash = await executeTransaction(unwrap, gasPriceWei, wallet, walletIndex, iterationCount, wrapAmount);
             if (!txHash) break;
 
-            console.log(`Wallet ${walletIndex + 1}, Transaction ${iterationCount + 1}: Unwrap Transaction sent: https://taikoscan.io/tx/${txHash}`);
+            console.log(`Wallet $, Transaction ${iterationCount + 1}: Unwrap Transaction sent: https://taikoscan.io/tx/${txHash}`);
         } else {
-            console.log(`Wallet ${walletIndex + 1}: Transactions skipped during the UTC hour ${currentHourUTC}.`);
+            console.log(`Wallet $: Transactions skipped during the UTC hour ${currentHourUTC}.`);
         }
 
         iterationCount++;
         const waitTime = Math.floor(3600 / transactionsPerHour * 1000); // Calculate wait time in milliseconds for even distribution
-        console.log(`Wallet ${walletIndex + 1}, Transaction ${iterationCount + 1}: Waiting for ${waitTime / 1000} seconds before the next transaction.`);
+        console.log(`Wallet $, Transaction ${iterationCount + 1}: Waiting for ${waitTime / 1000} seconds before the next transaction.`);
         await new Promise(resolve => setTimeout(resolve, waitTime));
     }
 }
