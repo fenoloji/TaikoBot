@@ -97,9 +97,3 @@ chmod +x setup-cron.sh
 ## CONTRIBUTE
 
 Feel free to fork and contribute adding more feature thanks.
-
-## SUPPORT
-//removed:  - Each tx contain tiny amount of tax to support next Bot with various features
-
-## Have Question?
-Join [Here](https://t.me/TaikoTxSupport)
