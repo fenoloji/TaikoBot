@@ -19,13 +19,13 @@ async function getNonce(web3Instance, walletAddress) {
     return await web3Instance.eth.getTransactionCount(walletAddress, 'pending');
 }
 
-async function executeTransaction(action, gasPriceWei, wallet, walletIndex, iterationCount, ...args) {
+async function executeTransaction(action, gasPriceWei, iterationCount, ...args) {
     let web3Instance = getWeb3();
     while (true) {
         try {
             const gasLimit = new BN(100000);
             const totalTxCost = gasLimit.mul(new BN(gasPriceWei));
-            const balanceWei = await web3Instance.eth.getBalance(wallet.address);
+            const balanceWei = await web3Instance.eth.getBalance(walletAddress);
             const balance = new BN(balanceWei);
 
             if (balance.lt(totalTxCost)) {
@@ -33,8 +33,8 @@ async function executeTransaction(action, gasPriceWei, wallet, walletIndex, iter
                 return;
             }
 
-            const localNonce = await getNonce(web3Instance, wallet.address);
-            return await action(...args, gasPriceWei.toString(), localNonce, wallet.address, wallet.privateKey);
+            const localNonce = await getNonce(web3Instance, walletAddress);
+            return await action(...args, gasPriceWei.toString(), localNonce, walletAddress, wallet.privateKey);
         } catch (error) {
             console.error(`Wallet $, Transaction ${iterationCount + 1}: Error executing transaction: ${error.message}`);
             if (error.message.includes("Invalid JSON RPC response")) {
@@ -68,7 +68,7 @@ async function main() {
             const web3Instance = getWeb3();
             const gasPriceWei = randomGasPrice(web3Instance);
 
-            const balanceWei = await web3Instance.eth.getBalance(wallet.address);
+            const balanceWei = await web3Instance.eth.getBalance(walletAddress);
             const balance = new BN(balanceWei);
             const gasLimit = new BN(500000); 
             const totalTxCost = gasLimit.mul(gasPriceWei);
