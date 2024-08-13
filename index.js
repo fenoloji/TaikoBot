@@ -1,66 +1,9 @@
 require('dotenv').config();
-const { getWeb3, switchRpc } = require('./config/web3');
+const { getWeb3, walletAddress, switchRpc } = require('./config/web3');
 const { wrap } = require('./src/module/wrap/wrap');
 const { unwrap } = require('./src/module/wrap/unwrap');
 const BN = require('bn.js');
-
-const wallets = [
-    {
-        address: process.env.WALLET_ADDRESS_1,
-        privateKey: process.env.PRIVATE_KEY_1
-    },
-    {
-        address: process.env.WALLET_ADDRESS_2,
-        privateKey: process.env.PRIVATE_KEY_2
-    },
-    {
-        address: process.env.WALLET_ADDRESS_3,
-        privateKey: process.env.PRIVATE_KEY_3
-    },
-    {
-        address: process.env.WALLET_ADDRESS_4,
-        privateKey: process.env.PRIVATE_KEY_4
-    },
-    {
-        address: process.env.WALLET_ADDRESS_5,
-        privateKey: process.env.PRIVATE_KEY_5
-    },
-    {
-        address: process.env.WALLET_ADDRESS_6,
-        privateKey: process.env.PRIVATE_KEY_6
-    },
-    {
-        address: process.env.WALLET_ADDRESS_7,
-        privateKey: process.env.PRIVATE_KEY_7
-    },
-    {
-        address: process.env.WALLET_ADDRESS_8,
-        privateKey: process.env.PRIVATE_KEY_8
-    },
-    {
-        address: process.env.WALLET_ADDRESS_9,
-        privateKey: process.env.PRIVATE_KEY_9
-    },
-    {
-        address: process.env.WALLET_ADDRESS_10,
-        privateKey: process.env.PRIVATE_KEY_10
-    },
-    {
-        address: process.env.WALLET_ADDRESS_11,
-        privateKey: process.env.PRIVATE_KEY_11
-    },
-    {
-        address: process.env.WALLET_ADDRESS_12,
-        privateKey: process.env.PRIVATE_KEY_12
-    },
-    {
-        address: process.env.WALLET_ADDRESS_13,
-        privateKey: process.env.PRIVATE_KEY_13
-    }
-    
-];                                                                                                                                          
-
-
+                                                                                                                                         
 function randomGasPrice(web3Instance) {
     const minGwei = new BN(web3Instance.utils.toWei('0.05', 'gwei'));
     const maxGwei = new BN(web3Instance.utils.toWei('0.054', 'gwei'));
@@ -106,7 +49,7 @@ async function executeTransaction(action, gasPriceWei, wallet, walletIndex, iter
     }
 }
 
-async function runTransactionsForWallet(wallet, walletIndex) {
+async function main() {
     const transactionsPerDay = Math.floor(Math.random() * 11) + 130; // Random number between 130 and 140
     const transactionsPerHour = Math.floor(transactionsPerDay / 20); // Spread transactions over 20 hours
 
@@ -168,15 +111,6 @@ async function runTransactionsForWallet(wallet, walletIndex) {
         console.log(`Wallet $, Transaction ${iterationCount + 1}: Waiting for ${waitTime / 1000} seconds before the next transaction.`);
         await new Promise(resolve => setTimeout(resolve, waitTime));
     }
-}
-
-async function main() {
-    const walletPromises = wallets.map((wallet, index) => {
-        const initialDelay = Math.floor(Math.random() * 3600000); // Random delay up to 1 hour
-        console.log(`Wallet ${index + 1}: Initial delay of ${initialDelay / 1000} seconds before starting transactions.`);
-        return new Promise(resolve => setTimeout(() => resolve(runTransactionsForWallet(wallet, index)), initialDelay));
-    });
-    await Promise.all(walletPromises);
 }
 
 main().catch(console.error);
