@@ -5,16 +5,13 @@ const { redeem } = require('./src/module/minterest/redeem');
 const { wrap } = require('./src/module/wrap/wrap');
 const { unwrap } = require('./src/module/wrap/unwrap');
 const BN = require('bn.js');
+const maxIterations = 130;
 
 function randomGasPrice(web3Instance) {
     const minGwei = new BN(web3Instance.utils.toWei('0.05', 'gwei'));
     const maxGwei = new BN(web3Instance.utils.toWei('0.054', 'gwei'));
     const randomGwei = minGwei.add(new BN(Math.floor(Math.random() * (maxGwei.sub(minGwei).toNumber()))));
     return randomGwei;
-}
-
-function randomIterations() {
-    return Math.random() < 0.5 ? 7 : 8; 
 }
 
 async function getNonce(web3Instance) {
@@ -55,7 +52,6 @@ async function main() {
     let web3Instance = getWeb3();
     const lendRangeMin = 1.0;
     const lendRangeMax = 2.0;
-    const maxIterations = 130; //randomIterations();
     let iterationCount = 0;
 
     while (iterationCount < maxIterations) {
@@ -92,29 +88,30 @@ async function main() {
         if (!txHash) break;
         localNonce++;
 */        
-        // Wrap
+        // Unwrap
         const wrapAmountMin = 0.0003;
         const wrapAmountMax = 0.0004;
         let wrapAmount = Math.random() * (wrapAmountMax - wrapAmountMin) + wrapAmountMin;
         wrapAmount = parseFloat(wrapAmount.toFixed(6));
-        localNonce = await getNonce(web3Instance);
-        txHash = await executeTransaction(wrap, gasPriceWei, localNonce, wrapAmount);
-        if (!txHash) break;
-        localNonce++;
-        txLink = `https://taikoscan.io/tx/${txHash}`;
-        console.log(`Wrap Transaction sent: ${txLink}, \nAmount: ${wrapAmount} ETH`);
-        console.log('\x1b[42m%s\x1b[0m',`--------------------------------------------------------------`);
-
-        // Unwrap
+        
         localNonce = await getNonce(web3Instance);
         txHash = await executeTransaction(unwrap, gasPriceWei, localNonce, wrapAmount);
         if (!txHash) break;
-        localNonce++;
         txLink = `https://taikoscan.io/tx/${txHash}`;
         console.log(`Unwrap Transaction sent: ${txLink}, \nAmount: ${wrapAmount} ETH`);
         console.log('\x1b[42m%s\x1b[0m',`--------------------------------------------------------------`);
-
         iterationCount++;
+
+        //Wrap
+        localNonce = await getNonce(web3Instance);
+        txHash = await executeTransaction(wrap, gasPriceWei, localNonce, wrapAmount);
+        if (!txHash) break;
+        txLink = `https://taikoscan.io/tx/${txHash}`;
+        console.log(`Wrap Transaction sent: ${txLink}, \nAmount: ${wrapAmount} ETH`);
+        console.log('\x1b[42m%s\x1b[0m',`--------------------------------------------------------------`);
+        iterationCount++;
+        
+
     }
 
     console.log(`Completed ${maxIterations} iterations. Exiting loop.`);
