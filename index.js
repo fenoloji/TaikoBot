@@ -95,13 +95,15 @@ async function main() {
             // Random delay before Unwrap (0 to 5 minutes)
             const randomDelay = Math.floor(Math.random() * 300000); // Random delay up to 5 minutes
             console.log(` Transaction ${iterationCount + 1}: Waiting ${randomDelay / 1000} seconds before Unwrap.`);
+            console.log('\x1b[42m%s\x1b[0m',`--------------------------------------------------------------`);
             await new Promise(resolve => setTimeout(resolve, randomDelay));
 
             // Unwrap
             txHash = await executeTransaction(unwrap, gasPriceWei, iterationCount, wrapAmount);
             if (!txHash) break;
 
-            console.log(`, Transaction ${iterationCount + 1}: Unwrap Transaction sent: https://taikoscan.io/tx/${txHash}`);
+            console.log(` Transaction ${iterationCount + 1}: Unwrap Transaction sent: https://taikoscan.io/tx/${txHash}`);
+            console.log('\x1b[42m%s\x1b[0m',`--------------------------------------------------------------`);
         } else {
             console.log(`: Transactions skipped during the UTC hour ${currentHourUTC}.`);
         }
