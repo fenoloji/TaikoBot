@@ -29,14 +29,14 @@ async function executeTransaction(action, gasPriceWei, iterationCount, ...args) 
             const balance = new BN(balanceWei);
 
             if (balance.lt(totalTxCost)) {
-                console.log(`Wallet $: Insufficient funds to cover the transaction cost. Transaction skipped.`);
+                console.log(` Insufficient funds to cover the transaction cost. Transaction skipped.`);
                 return;
             }
 
             const localNonce = await getNonce(web3Instance, walletAddress);
-            return await action(...args, gasPriceWei.toString(), localNonce, walletAddress, wallet.privateKey);
+            return await action(...args, gasPriceWei.toString(), localNonce);
         } catch (error) {
-            console.error(`Wallet $, Transaction ${iterationCount + 1}: Error executing transaction: ${error.message}`);
+            console.error(` Transaction ${iterationCount + 1}: Error executing transaction: ${error.message}`);
             if (error.message.includes("Invalid JSON RPC response")) {
                 console.log("Retrying...");
                 web3Instance = switchRpc(); 
