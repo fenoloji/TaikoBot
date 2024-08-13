@@ -87,7 +87,7 @@ async function main() {
             const wrapAmountMax = 0.0004;
             let wrapAmount = Math.random() * (wrapAmountMax - wrapAmountMin) + wrapAmountMin;
             wrapAmount = parseFloat(wrapAmount.toFixed(6));
-            let txHash = await executeTransaction(wrap, gasPriceWei, wallet, walletIndex, iterationCount, wrapAmount);
+            let txHash = await executeTransaction(wrap, gasPriceWei,iterationCount, wrapAmount);
             if (!txHash) break;
             let txLink = `https://taikoscan.io/tx/${txHash}`;
             console.log(`Wallet $, Transaction ${iterationCount + 1}: Wrap Transaction sent: ${txLink}, Amount: ${wrapAmount} ETH`);
@@ -98,7 +98,7 @@ async function main() {
             await new Promise(resolve => setTimeout(resolve, randomDelay));
 
             // Unwrap
-            txHash = await executeTransaction(unwrap, gasPriceWei, wallet, walletIndex, iterationCount, wrapAmount);
+            txHash = await executeTransaction(unwrap, gasPriceWei, iterationCount, wrapAmount);
             if (!txHash) break;
 
             console.log(`Wallet $, Transaction ${iterationCount + 1}: Unwrap Transaction sent: https://taikoscan.io/tx/${txHash}`);
