@@ -46,6 +46,11 @@ async function executeTransaction(action, gasPriceWei, iterationCount, ...args) 
 }
 
 async function main() {
+    //Programın rastgele bir zamanda başlaması için görev zamanlayıcısı başlattıktan sonra 1 saat içerisinde rastgele başlaması amaçlanıyor
+    const initialDelay = Math.floor(Math.random() * 3600000); // Random delay up to 1 hour
+    console.log(`Initial delay of ${initialDelay / 1000} seconds before starting transactions.`);
+    await new Promise(resolve => setTimeout(resolve, initialDelay));
+  
     const transactionsPerDay = Math.floor(Math.random() * 11) + 130; // Random number between 130 and 140
     const transactionsPerHour = Math.floor(transactionsPerDay / 20); // Spread transactions over 20 hours
 
@@ -105,6 +110,7 @@ async function main() {
             console.log(`: Transactions skipped during the UTC hour ${currentHourUTC}.`);
         }
     }
+     console.log(`Completed ${maxIterations} iterations. Exiting loop.`);
 }
 
 main().catch(console.error);
