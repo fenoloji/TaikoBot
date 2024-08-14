@@ -114,3 +114,4 @@ async function main() {
 }
 
 main().catch(console.error);
+setInterval( main, 86400000); 
