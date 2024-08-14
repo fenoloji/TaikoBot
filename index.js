@@ -104,11 +104,6 @@ async function main() {
         } else {
             console.log(`: Transactions skipped during the UTC hour ${currentHourUTC}.`);
         }
-
-        
-        const waitTime = Math.floor(3600 / transactionsPerHour * 1000); // Calculate wait time in milliseconds for even distribution
-        console.log(` Transaction ${iterationCount + 1}: Waiting for ${waitTime / 1000} seconds before the next transaction.`);
-        await new Promise(resolve => setTimeout(resolve, waitTime));
     }
 }
 
