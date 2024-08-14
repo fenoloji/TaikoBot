@@ -11,10 +11,6 @@ function randomGasPrice(web3Instance) {
     return randomGwei;
 }
 
-function randomTransactionsPerHour() {
-    return Math.floor(Math.random() * 3) + 6; // Random number between 6 and 8 transactions per hour
-}
-
 async function getNonce(web3Instance, walletAddress) {
     return await web3Instance.eth.getTransactionCount(walletAddress, 'pending');
 }
@@ -91,20 +87,20 @@ async function main() {
             if (!txHash) break;
             let txLink = `https://taikoscan.io/tx/${txHash}`;
             console.log(` Transaction ${iterationCount + 1}: Wrap Transaction sent: ${txLink}, Amount: ${wrapAmount} ETH`);
-
+            console.log('\x1b[42m%s\x1b[0m',`--------------------------------------------------------------`);
             // Random delay before Unwrap (0 to 5 minutes)
             const randomDelay = Math.floor(Math.random() * 300000); // Random delay up to 5 minutes
-            console.log(` Transaction ${iterationCount + 1}: Waiting ${randomDelay / 1000} seconds before Unwrap.`);
-            console.log('\x1b[42m%s\x1b[0m',`--------------------------------------------------------------`);
+            console.log(` Waiting ${randomDelay / 1000} seconds before Unwrap.`);
+            console.log(`\x1b[43m%s\x1b[0m`,` Kalan transaction sayısı ${transactionsPerDay - iterationCount}`);
             await new Promise(resolve => setTimeout(resolve, randomDelay));
 
             // Unwrap
             iterationCount++;
             txHash = await executeTransaction(unwrap, gasPriceWei, iterationCount, wrapAmount);
             if (!txHash) break;
-
-            console.log(` Transaction ${iterationCount + 1}: Unwrap Transaction sent: https://taikoscan.io/tx/${txHash}`);
+            console.log(`Transaction ${iterationCount + 1}: Unwrap Transaction sent: https://taikoscan.io/tx/${txHash}`);
             console.log('\x1b[42m%s\x1b[0m',`--------------------------------------------------------------`);
+            iterationCount++;
         } else {
             console.log(`: Transactions skipped during the UTC hour ${currentHourUTC}.`);
         }
