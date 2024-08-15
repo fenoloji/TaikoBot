@@ -51,7 +51,7 @@ async function main() {
     console.log(`Initial delay of ${initialDelay / 1000} seconds before starting transactions.`);
     await new Promise(resolve => setTimeout(resolve, initialDelay));
   
-    const transactionsPerDay = Math.floor(Math.random() * 11) + 40; // Random number between 130 and 140
+    const transactionsPerDay = Math.floor(Math.random() * 11) + 130; // Random number between 130 and 140
     const transactionsPerHour = Math.floor(transactionsPerDay / 20); // Spread transactions over 20 hours
 
     let iterationCount = 0;
