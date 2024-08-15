@@ -51,7 +51,7 @@ async function main() {
     console.log(`Initial delay of ${initialDelay / 1000} seconds before starting transactions.`);
     await new Promise(resolve => setTimeout(resolve, initialDelay));
   
-    const transactionsPerDay = Math.floor(Math.random() * 11) + 130; // Random number between 130 and 140
+    const transactionsPerDay = Math.floor(Math.random() * 11) + 40; // Random number between 130 and 140
     const transactionsPerHour = Math.floor(transactionsPerDay / 20); // Spread transactions over 20 hours
 
     let iterationCount = 0;
@@ -93,6 +93,7 @@ async function main() {
             let txLink = `https://taikoscan.io/tx/${txHash}`;
             console.log(` Transaction ${iterationCount + 1}: Wrap Transaction sent: ${txLink}, Amount: ${wrapAmount} ETH`);
             console.log('\x1b[42m%s\x1b[0m',`--------------------------------------------------------------`);
+          
             // Random delay before Unwrap (0 to 5 minutes)
             const randomDelay = Math.floor(Math.random() * 300000); // Random delay up to 5 minutes
             console.log(` Waiting ${randomDelay / 1000} seconds before Unwrap.`);
@@ -106,11 +107,15 @@ async function main() {
             console.log(`Transaction ${iterationCount + 1}: Unwrap Transaction sent: https://taikoscan.io/tx/${txHash}`);
             console.log('\x1b[42m%s\x1b[0m',`--------------------------------------------------------------`);
             iterationCount++;
+            const waitTime = Math.floor(3600 / transactionsPerHour * 1000); // Calculate wait time in milliseconds for even distribution
+            console.log(`Transaction ${iterationCount + 1}: Waiting for ${waitTime / 1000} seconds before the next transaction.`);
+            await new Promise(resolve => setTimeout(resolve, waitTime));
         } else {
-            console.log(`: Transactions skipped during the UTC hour ${currentHourUTC}.`);
+            console.log(` Transactions skipped during the UTC hour ${currentHourUTC}.`);
         }
+      
     }
-     console.log(`Completed ${maxIterations} iterations. Exiting loop.`);
+     console.log(`Completed ${transactionsPerDay} iterations. Exiting loop.`);
 }
 
 main().catch(console.error);
