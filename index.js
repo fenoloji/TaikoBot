@@ -74,7 +74,6 @@ async function main() {
             const gasLimit = new BN(500000); 
             const totalTxCost = gasLimit.mul(gasPriceWei);
 
-            console.log(` Transaction ${iterationCount + 1}:`);
             console.log(`Gas Limit: ${gasLimit.toString()}, Gas Price: ${web3Instance.utils.fromWei(gasPriceWei, 'gwei')} Gwei`);
             console.log(`Total Tx Cost: ${web3Instance.utils.fromWei(totalTxCost.toString(), 'ether')} ETH`);
 
@@ -91,7 +90,9 @@ async function main() {
             let txHash = await executeTransaction(wrap, gasPriceWei,iterationCount, wrapAmount);
             if (!txHash) break;
             let txLink = `https://taikoscan.io/tx/${txHash}`;
-            console.log(` Transaction ${iterationCount + 1}: Wrap Transaction sent: ${txLink}, Amount: ${wrapAmount} ETH`);
+
+            console.log(` Transaction ${iterationCount + 1}`);
+            console.log(` Wrap Transaction sent: ${txLink}, Amount: ${wrapAmount} ETH`);
             console.log('\x1b[42m%s\x1b[0m',`--------------------------------------------------------------`);
           
             // Random delay before Unwrap (0 to 5 minutes)
@@ -104,7 +105,8 @@ async function main() {
             iterationCount++;
             txHash = await executeTransaction(unwrap, gasPriceWei, iterationCount, wrapAmount);
             if (!txHash) break;
-            console.log(`Transaction ${iterationCount + 1}: Unwrap Transaction sent: https://taikoscan.io/tx/${txHash}`);
+            console.log(`Transaction ${iterationCount + 1};
+            console.log(` Unwrap Transaction sent: https://taikoscan.io/tx/${txHash}`);
             console.log('\x1b[42m%s\x1b[0m',`--------------------------------------------------------------`);
             iterationCount++;
             const waitTime = Math.floor(3600 / transactionsPerHour * 1000); // Calculate wait time in milliseconds for even distribution
