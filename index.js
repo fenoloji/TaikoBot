@@ -116,6 +116,7 @@ async function main() {
             await new Promise(resolve => setTimeout(resolve, remainDelay));
         } else {
             console.log(` Transactions skipped during the UTC hour ${currentHourUTC}.`);
+            await new Promise(resolve => setTimeout(resolve, remainDelay));
         }
       
     }
