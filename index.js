@@ -3,7 +3,7 @@ const { getWeb3, walletAddress, switchRpc } = require('./config/web3');
 const { wrap } = require('./src/module/wrap/wrap');
 const { unwrap } = require('./src/module/wrap/unwrap');
 const BN = require('bn.js');
-const firstRun = false;
+const firstRun = true;
                                                                                                                                          
 function randomGasPrice(web3Instance) {
     const minGwei = new BN(web3Instance.utils.toWei('0.05', 'gwei'));
@@ -52,8 +52,18 @@ async function main() {
     console.log(`Initial delay of ${initialDelay / 1000} seconds before starting transactions.`);
     await new Promise(resolve => setTimeout(resolve, initialDelay));
   
-    const transactionsPerDay = Math.floor(Math.random() * 11) + 130; // Random number between 130 and 140
-    const transactionsPerHour = Math.floor(transactionsPerDay / 20); // Spread transactions over 20 hours
+    if (firstRun) {
+      firstRun = false;
+      const currentHourUTC = new Date().getUTCHours();
+      const remainHour = 20 - currentHourUTC ;
+      const transactionsPerDay = Math.floor(Math.random() * 11) + 130; // Random number between 130 and 140
+      const transactionsPerHour = Math.floor(transactionsPerDay / remainHour); // Spread transactions over 20 hours
+      
+    } else {
+        const transactionsPerDay = Math.floor(Math.random() * 11) + 130; // Random number between 130 and 140
+        const transactionsPerHour = Math.floor(transactionsPerDay / 20); // Spread transactions over 20 hours
+    }
+
 
     let iterationCount = 0;
 
