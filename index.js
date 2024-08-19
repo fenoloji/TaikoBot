@@ -3,6 +3,7 @@ const { getWeb3, walletAddress, switchRpc } = require('./config/web3');
 const { wrap } = require('./src/module/wrap/wrap');
 const { unwrap } = require('./src/module/wrap/unwrap');
 const BN = require('bn.js');
+const firstRun = false;
                                                                                                                                          
 function randomGasPrice(web3Instance) {
     const minGwei = new BN(web3Instance.utils.toWei('0.05', 'gwei'));
@@ -95,8 +96,9 @@ async function main() {
             console.log(` Wrap Transaction sent: ${txLink}, Amount: ${wrapAmount} ETH`);
             console.log('\x1b[42m%s\x1b[0m',`--------------------------------------------------------------`);
           
-            // Random delay before Unwrap (0 to 5 minutes)
-            const randomDelay = Math.floor(Math.random() * 300000); // Random delay up to 5 minutes
+            // Random delay before Unwrap
+            const waitTime = Math.floor(3600 / transactionsPerHour * 1000);
+            const randomDelay = Math.floor(Math.random() * waitTime); // Random delay up to waitTime
             console.log(` Waiting ${randomDelay / 1000} seconds before Unwrap.`);
             console.log(`\x1b[43m%s\x1b[0m`,` Kalan transaction sayısı ${transactionsPerDay - iterationCount}`);
             await new Promise(resolve => setTimeout(resolve, randomDelay));
@@ -109,9 +111,9 @@ async function main() {
             console.log(` Unwrap Transaction sent: https://taikoscan.io/tx/${txHash}`);
             console.log('\x1b[42m%s\x1b[0m',`--------------------------------------------------------------`);
             iterationCount++;
-            const waitTime = Math.floor(3600 / transactionsPerHour * 1000); // Calculate wait time in milliseconds for even distribution
-            console.log(`Transaction ${iterationCount + 1}: Waiting for ${waitTime / 1000} seconds before the next transaction.`);
-            await new Promise(resolve => setTimeout(resolve, waitTime));
+            remainDelay = waitTime - randomDelay + waitTime
+            console.log(`Transaction ${iterationCount + 1}: Waiting for ${remainDelay / 1000} seconds before the next transaction.`);
+            await new Promise(resolve => setTimeout(resolve, remainDelay));
         } else {
             console.log(` Transactions skipped during the UTC hour ${currentHourUTC}.`);
         }
