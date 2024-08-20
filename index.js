@@ -4,6 +4,7 @@ const { wrap } = require('./src/module/wrap/wrap');
 const { unwrap } = require('./src/module/wrap/unwrap');
 const BN = require('bn.js');
 const firstRun = true;
+const transactionsPerDay = 130;
                                                                                                                                          
 function randomGasPrice(web3Instance) {
     const minGwei = new BN(web3Instance.utils.toWei('0.05', 'gwei'));
@@ -54,7 +55,7 @@ async function main() {
     await new Promise(resolve => setTimeout(resolve, initialDelay));
   
     if (firstRun) {
-      firstRun = false;
+      const firstRun = false;
       const currentHourUTC = new Date().getUTCHours();
       const remainHour = 20 - currentHourUTC ;
       const transactionsPerDay = Math.floor(Math.random() * 11) + 130; // Random number between 130 and 140
