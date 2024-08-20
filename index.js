@@ -7,6 +7,7 @@ let firstRun = true;
 let transactionsPerDay = 130;
 let transactionsPerHour = 7;
 let remainDelay = 6000;
+let remainHour = 0;
                                                                                                                                          
 function randomGasPrice(web3Instance) {
     const minGwei = new BN(web3Instance.utils.toWei('0.05', 'gwei'));
@@ -59,7 +60,7 @@ async function main() {
     if (firstRun) {
       firstRun = false;
       const currentHourUTC = new Date().getUTCHours();
-      const remainHour = 20 - currentHourUTC ;
+      remainHour = 24 - currentHourUTC + 3;
       transactionsPerDay = Math.floor(Math.random() * 11) + 130; // Random number between 130 and 140
       transactionsPerHour = Math.floor(transactionsPerDay / remainHour); // Spread transactions over 20 hours
       
