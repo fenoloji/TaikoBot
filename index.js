@@ -49,7 +49,7 @@ async function executeTransaction(action, gasPriceWei, iterationCount, ...args) 
 }
 
 async function main() {
-  while true {
+  while (true) {
     //Programın rastgele bir zamanda başlaması için görev zamanlayıcısı başlattıktan sonra 1 saat içerisinde rastgele başlaması amaçlanıyor
     const initialDelay = Math.floor(Math.random() * 3600000); // Random delay up to 1 hour
     console.log(`Initial delay of ${initialDelay / 1000} seconds before starting transactions.`);
