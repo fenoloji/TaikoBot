@@ -114,7 +114,7 @@ async function main() {
             iterationCount++;
             txHash = await executeTransaction(unwrap, gasPriceWei, iterationCount, wrapAmount);
             if (!txHash) break;
-            console.log(`Transaction ${iterationCount + 1});
+            console.log(`Transaction ${iterationCount + 1}`);
             console.log(` Unwrap Transaction sent: https://taikoscan.io/tx/${txHash}`);
             console.log('\x1b[42m%s\x1b[0m',`--------------------------------------------------------------`);
             iterationCount++;
