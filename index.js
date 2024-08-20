@@ -56,18 +56,10 @@ async function main() {
     const initialDelay = Math.floor(Math.random() * 3600000); // Random delay up to 1 hour
     console.log(`Initial delay of ${initialDelay / 1000} seconds before starting transactions.`);
     await new Promise(resolve => setTimeout(resolve, initialDelay));
-  
-    if (firstRun) {
-      firstRun = false;
-      const currentHourUTC = new Date().getUTCHours();
-      remainHour = 24 - currentHourUTC + 3;
-      transactionsPerDay = Math.floor(Math.random() * 11) + 130; // Random number between 130 and 140
-      transactionsPerHour = Math.floor(transactionsPerDay / remainHour); // Spread transactions over 20 hours
-      
-    } else {
-        transactionsPerDay = Math.floor(Math.random() * 11) + 130; // Random number between 130 and 140
-        transactionsPerHour = Math.floor(transactionsPerDay / 20); // Spread transactions over 20 hours
-    }
+ 
+    transactionsPerDay = Math.floor(Math.random() * 11) + 130; // Random number between 130 and 140
+    transactionsPerHour = Math.floor(transactionsPerDay / 20); // Spread transactions over 20 hours
+ 
 
 
     let iterationCount = 0;
@@ -131,20 +123,16 @@ async function main() {
             await new Promise(resolve => setTimeout(resolve, remainDelay));
         } else {
             console.log(` Transactions skipped during the UTC hour ${currentHourUTC}.`);
-            await new Promise(resolve => setTimeout(resolve, remainDelay));
+            await new Promise(resolve => setTimeout(resolve, 300000));
         }
       
     }
      console.log(`Completed ${transactionsPerDay} iterations.`);
-     const currentHourUTC = new Date().getUTCHours();
-     if (currentHourUTC < 3){
-       const timeSleep = 3 - currentHourUTC;
-       await new Promise(resolve => setTimeout(resolve, timeSleep));
-     } else {
-       const timeSleep = 24 - currentHourUTC + 3;
-       await new Promise(resolve => setTimeout(resolve, timeSleep));
      }
+    //Bugünlük tx ler yapıldı yarın için uykuya dal
+    const zzzz = 60000 * 60 * 24;
+    await new Promise(resolve => setTimeout(resolve, zzzz));
   }
-}
+
 
 main().catch(console.error);
