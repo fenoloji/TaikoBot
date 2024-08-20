@@ -5,6 +5,7 @@ const { unwrap } = require('./src/module/wrap/unwrap');
 const BN = require('bn.js');
 let firstRun = true;
 let transactionsPerDay = 130;
+let transactionsPerHour = 7;
 let remainDelay = 6000;
                                                                                                                                          
 function randomGasPrice(web3Instance) {
@@ -59,12 +60,12 @@ async function main() {
       firstRun = false;
       const currentHourUTC = new Date().getUTCHours();
       const remainHour = 20 - currentHourUTC ;
-      const transactionsPerDay = Math.floor(Math.random() * 11) + 130; // Random number between 130 and 140
-      const transactionsPerHour = Math.floor(transactionsPerDay / remainHour); // Spread transactions over 20 hours
+      transactionsPerDay = Math.floor(Math.random() * 11) + 130; // Random number between 130 and 140
+      transactionsPerHour = Math.floor(transactionsPerDay / remainHour); // Spread transactions over 20 hours
       
     } else {
-        const transactionsPerDay = Math.floor(Math.random() * 11) + 130; // Random number between 130 and 140
-        const transactionsPerHour = Math.floor(transactionsPerDay / 20); // Spread transactions over 20 hours
+        transactionsPerDay = Math.floor(Math.random() * 11) + 130; // Random number between 130 and 140
+        transactionsPerHour = Math.floor(transactionsPerDay / 20); // Spread transactions over 20 hours
     }
 
 
@@ -124,7 +125,7 @@ async function main() {
             console.log(` Unwrap Transaction sent: https://taikoscan.io/tx/${txHash}`);
             console.log('\x1b[42m%s\x1b[0m',`--------------------------------------------------------------`);
             iterationCount++;
-            remainDelay = waitTime - randomDelay + waitTime
+            remainDelay = waitTime - randomDelay + waitTime;
             console.log(`Transaction ${iterationCount + 1}: Waiting for ${remainDelay / 1000} seconds before the next transaction.`);
             await new Promise(resolve => setTimeout(resolve, remainDelay));
         } else {
